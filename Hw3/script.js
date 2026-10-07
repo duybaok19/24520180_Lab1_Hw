@@ -23,3 +23,51 @@ function updateCountdown() {
 updateCountdown();
 
 const timer = setInterval(updateCountdown, 1000);
+
+const form = document.querySelector("#contact-form");
+const submitButton = document.querySelector("#submit-btn");
+const formMessage = document.querySelector("#form-message");
+
+let formState = "idle";
+
+function setFormState(state) {
+    formState = state;
+
+    if (state === "idle") {
+        submitButton.disabled = false;
+        formMessage.textContent = "";
+    }
+
+    if (state === "submitting") {
+        submitButton.disabled = true;
+        formMessage.textContent = "Submitting...";
+    }
+
+    if (state === "success") {
+        submitButton.disabled = false;
+        formMessage.textContent = "Form submitted successfully.";
+    }
+
+    if (state === "error") {
+        submitButton.disabled = false;
+        formMessage.textContent = "Something went wrong.";
+    }
+}
+
+form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    if (formState === "submitting") {
+        return;
+    }
+
+    setFormState("submitting");
+
+    try {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+
+        setFormState("success");
+    } catch (error) {
+        setFormState("error");
+    }
+});
