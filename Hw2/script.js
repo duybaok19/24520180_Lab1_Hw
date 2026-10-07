@@ -14,3 +14,10 @@ function playSound(key) {
         pad.classList.remove('active');
     }, 100);
 }
+window.addEventListener("keydown", (e) => {
+    if (e.repeat) {
+        return;
+    }
+
+    playSound(e.key);
+});
