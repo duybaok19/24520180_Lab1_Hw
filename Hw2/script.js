@@ -21,3 +21,45 @@ window.addEventListener("keydown", (e) => {
 
     playSound(e.key);
 });
+
+class BeatRecorder {
+    constructor() {
+        this.records = [];
+        this.startTime = null;
+        this.isRecording = false;
+    }
+
+    start() {
+        this.records = [];
+        this.startTime = performance.now();
+        this.isRecording = true;
+    }
+
+    record(key) {
+        if (!this.isRecording || this.startTime === null) {
+            return;
+        }
+
+        const timestamp = performance.now() - this.startTime;
+
+        this.records.push({
+            key,
+            timestamp
+        });
+    }
+
+    stop() {
+        this.isRecording = false;
+        this.startTime = null;
+
+        return this.records;
+    }
+
+    playback() {
+        this.records.forEach(record => {
+            setTimeout(() => {
+                playSound(record.key);
+            }, record.timestamp);
+        });
+    }
+}
