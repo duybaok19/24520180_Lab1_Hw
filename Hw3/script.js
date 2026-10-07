@@ -45,7 +45,6 @@ function setFormState(state) {
 
     if (state === "success") {
         submitButton.disabled = false;
-        formMessage.textContent = "Form submitted successfully.";
     }
 
     if (state === "error") {
@@ -57,14 +56,21 @@ function setFormState(state) {
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
+    // Prevent double-submit
     if (formState === "submitting") {
         return;
     }
+
+    const name = document.querySelector("#name").value.trim();
 
     setFormState("submitting");
 
     try {
         await new Promise(resolve => setTimeout(resolve, 1000));
+
+        // Safe DOM update: prevent XSS
+        formMessage.textContent =
+            `Hello, ${name}! Your form was submitted successfully.`;
 
         setFormState("success");
     } catch (error) {
